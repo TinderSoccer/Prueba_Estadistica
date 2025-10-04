@@ -416,10 +416,10 @@ function App() {
 
         {/* Tab 2: Tipo de Institución */}
         {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Tipo de Institución</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-12 min-h-[750px]">
+            <h2 className="text-6xl md:text-7xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
             <div>
-              <ResponsiveContainer width="100%" height={470}>
+              <ResponsiveContainer width="100%" height={520}>
                 <BarChart data={institutionData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
