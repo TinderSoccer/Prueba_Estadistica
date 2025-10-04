@@ -225,7 +225,7 @@ function App() {
       {showIntro ? (
         <div className="flex items-center justify-center min-h-screen">
           <div className="text-center max-w-7xl px-4">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-fadeIn">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-fadeIn">
               Estadísticas de Educación Superior
             </h1>
             <p className="text-2xl md:text-3xl lg:text-4xl text-gray-700 font-bold mb-4 animate-slideInRight">
@@ -234,7 +234,7 @@ function App() {
             <p className="text-xl md:text-2xl text-gray-600 font-semibold mb-8 animate-fadeIn">Año 2021</p>
 
             <div className="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-6 rounded-3xl shadow-2xl mb-10 animate-scaleIn">
-              <p className="text-5xl md:text-6xl font-black">5,796 estudiantes</p>
+              <p className="text-4xl md:text-5xl font-black">5,796 estudiantes</p>
             </div>
 
             <div className="mb-10 animate-fadeIn">
@@ -258,7 +258,7 @@ function App() {
           </div>
         </div>
       ) : (
-      <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="w-full max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-3 justify-center mb-3">
@@ -281,11 +281,11 @@ function App() {
         {/* Content */}
         {/* Tab 7: Resumen */}
         {activeTab === 7 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             {resumenPage === 0 ? (
               // Página 1: Medidas de Tendencia Central
               <div className="flex-1 flex flex-col gap-8">
-                <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Medidas de Tendencia Central</h2>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Tendencia Central</h2>
                 <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 1 de 2 - Presiona → para continuar</p>
 
                 <div>
@@ -307,7 +307,7 @@ function App() {
             ) : (
               // Página 2: Medidas de Dispersión
               <div className="flex-1 flex flex-col gap-8">
-                <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Medidas de Dispersión</h2>
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Dispersión</h2>
                 <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 2 de 2 - Presiona ← para volver</p>
 
                 <div>
@@ -332,10 +332,10 @@ function App() {
 
         {/* Tab 0: Distribución por Género */}
         {activeTab === 0 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -377,10 +377,10 @@ function App() {
 
         {/* Tab 1: Rango de Edad */}
         {activeTab === 1 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={ageRangeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -424,10 +424,10 @@ function App() {
 
         {/* Tab 2: Tipo de Institución */}
         {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-6xl md:text-7xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={institutionData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -476,13 +476,13 @@ function App() {
 
         {/* Tab 3: Modalidad y Jornada */}
         {activeTab === 3 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
             <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Modalidad */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
-                <div className="flex-1 w-full min-h-[280px] max-h-[460px]">
+                <div className="flex-1 w-full min-h-[360px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -509,7 +509,7 @@ function App() {
               {/* Jornada */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
-                <div className="flex-1 w-full min-h-[280px] max-h-[460px]">
+                <div className="flex-1 w-full min-h-[360px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={scheduleData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -546,10 +546,10 @@ function App() {
 
         {/* Tab 4: Áreas de Conocimiento */}
         {activeTab === 4 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={knowledgeAreasData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -599,10 +599,10 @@ function App() {
 
         {/* Tab 5: Duración de Carreras */}
         {activeTab === 5 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={durationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -647,10 +647,10 @@ function App() {
 
         {/* Tab 6: Costos */}
         {activeTab === 6 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
+              <div className="flex-1 w-full min-h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={costsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
