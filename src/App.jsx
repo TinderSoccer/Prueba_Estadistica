@@ -258,7 +258,7 @@ function App() {
           </div>
         </div>
       ) : (
-      <div className="w-full max-w-[1800px] mx-auto px-4 py-2">
+      <div className="w-full px-4 sm:px-6 lg:px-12 py-6">
 
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-3 justify-center mb-3">
@@ -281,10 +281,10 @@ function App() {
         {/* Content */}
         {/* Tab 7: Resumen */}
         {activeTab === 7 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             {resumenPage === 0 ? (
               // Página 1: Medidas de Tendencia Central
-              <div>
+              <div className="flex-1 flex flex-col gap-8">
                 <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Medidas de Tendencia Central</h2>
                 <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 1 de 2 - Presiona → para continuar</p>
 
@@ -306,7 +306,7 @@ function App() {
               </div>
             ) : (
               // Página 2: Medidas de Dispersión
-              <div>
+              <div className="flex-1 flex flex-col gap-8">
                 <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Medidas de Dispersión</h2>
                 <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 2 de 2 - Presiona ← para volver</p>
 
@@ -332,52 +332,57 @@ function App() {
 
         {/* Tab 0: Distribución por Género */}
         {activeTab === 0 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={480}>
-                <PieChart>
-                  <Pie
-                    data={genderData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percentage }) => `${name}: ${percentage}%`}
-                    outerRadius={170}
-                    fill="#8884d8"
-                    dataKey="value"
-                    style={{ fontSize: '20px', fontWeight: 'bold' }}
-                  >
-                    {genderData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={GENDER_COLORS[index % GENDER_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={genderData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percentage }) => `${name}: ${percentage}%`}
+                      outerRadius={170}
+                      fill="#8884d8"
+                      dataKey="value"
+                      style={{ fontSize: '20px', fontWeight: 'bold' }}
+                    >
+                      {genderData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={GENDER_COLORS[index % GENDER_COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 <StatCard icon="👩" label="Mujeres" value="3,265" sublabel="56.33% del total" color="pink" />
                 <StatCard icon="👨" label="Hombres" value="2,531" sublabel="43.67% del total" color="blue" />
               </div>
 
-              <InsightBox title="Análisis de Género" color="purple">
-                <p>• 56.33% mujeres vs 43.67% hombres: mayoría femenina ligera</p>
-                <p>• Refleja tendencia nacional de feminización de educación superior</p>
-                <p>• Consistente con predominio femenino en áreas como Salud y Educación</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis de Género" color="purple">
+                  <p>• 56.33% mujeres vs 43.67% hombres: mayoría femenina ligera</p>
+                  <p>• Refleja tendencia nacional de feminización de educación superior</p>
+                  <p>• Consistente con predominio femenino en áreas como Salud y Educación</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 1: Rango de Edad */}
         {activeTab === 1 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={470}>
-                <BarChart data={ageRangeData}>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={ageRangeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     dataKey="range"
@@ -394,33 +399,37 @@ function App() {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
                 <StatCard icon="📊" label="Promedio" value="24.42 años" color="blue" />
                 <StatCard icon="📍" label="Mediana" value="22 años" color="purple" />
                 <StatCard icon="🎯" label="Moda" value="19 años" color="green" />
                 <StatCard icon="📏" label="Desviación Estándar" value="6.38 años" color="orange" />
               </div>
 
-              <InsightBox title="Análisis Etario" color="blue">
-                <p>• Grupo de 20 a 24 años predomina con 47.3% (2,834 estudiantes)</p>
-                <p>• Moda de 19 años indica fuerte ingreso después de enseñanza secundaria</p>
-                <p>• Desviación estándar de 6.38 años muestra dispersión moderada</p>
-                <p>• 26.14% de coeficiente de variación indica variabilidad etaria considerable</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis Etario" color="blue">
+                  <p>• Grupo de 20 a 24 años predomina con 47.3% (2,834 estudiantes)</p>
+                  <p>• Moda de 19 años indica fuerte ingreso después de enseñanza secundaria</p>
+                  <p>• Desviación estándar de 6.38 años muestra dispersión moderada</p>
+                  <p>• 26.14% de coeficiente de variación indica variabilidad etaria considerable</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 2: Tipo de Institución */}
         {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-12 min-h-[750px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-6xl md:text-7xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={520}>
-                <BarChart data={institutionData} layout="vertical">
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={institutionData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     type="number"
@@ -439,10 +448,11 @@ function App() {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
                 {institutionData.map((inst, index) => (
                   <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 shadow">
                     <div className="text-sm text-gray-600">{inst.name}</div>
@@ -452,87 +462,96 @@ function App() {
                 ))}
               </div>
 
-              <InsightBox title="Análisis Institucional" color="indigo">
-                <p>• Universidad de Magallanes concentra 41% como institución del Consejo de Rectores líder regional</p>
-                <p>• INACAP lidera formación técnico-profesional con 30.6%</p>
-                <p>• Universidades privadas solo 18.8%, baja penetración regional</p>
-                <p>• Centros de Formación Técnica e Institutos Profesionales representan segmento importante de formación técnica</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis Institucional" color="indigo">
+                  <p>• Universidad de Magallanes concentra 41% como institución del Consejo de Rectores líder regional</p>
+                  <p>• INACAP lidera formación técnico-profesional con 30.6%</p>
+                  <p>• Universidades privadas solo 18.8%, baja penetración regional</p>
+                  <p>• Centros de Formación Técnica e Institutos Profesionales representan segmento importante de formación técnica</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 3: Modalidad y Jornada */}
         {activeTab === 3 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Modalidad */}
-              <div className="bg-white rounded-xl shadow-xl p-6">
+              <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
-                <ResponsiveContainer width="100%" height={340}>
-                  <PieChart>
-                    <Pie
-                      data={modalityData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percentage }) => `${name}: ${percentage}%`}
-                      outerRadius={120}
-                      fill="#8884d8"
-                      dataKey="value"
-                      style={{ fontSize: '18px', fontWeight: 'bold' }}
-                    >
-                      {modalityData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                  </PieChart>
-                </ResponsiveContainer>
+                <div className="flex-1 w-full min-h-[45vh]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={modalityData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        label={({ name, percentage }) => `${name}: ${percentage}%`}
+                        outerRadius={150}
+                        fill="#8884d8"
+                        dataKey="value"
+                        style={{ fontSize: '18px', fontWeight: 'bold' }}
+                      >
+                        {modalityData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index]} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<CustomTooltip />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
 
               {/* Jornada */}
-              <div className="bg-white rounded-xl shadow-xl p-6">
+              <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
-                <ResponsiveContainer width="100%" height={340}>
-                  <BarChart data={scheduleData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 'bold' }} />
-                    <YAxis tick={{ fontSize: 16, fontWeight: 'bold' }} />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="students" fill="#98D8C8" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
-                      {scheduleData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index + 2]} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                <div className="flex-1 w-full min-h-[45vh]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={scheduleData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 'bold' }} />
+                      <YAxis tick={{ fontSize: 16, fontWeight: 'bold' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar dataKey="students" fill="#98D8C8" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
+                        {scheduleData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index + 2]} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
               <StatCard icon="🏫" label="Presencial" value="5,821" sublabel="97.2% del total" color="blue" />
               <StatCard icon="☀️" label="Diurno" value="4,245" sublabel="60.9% del total" color="orange" />
               <StatCard icon="🌙" label="Vespertino" value="1,689" sublabel="24.2% del total" color="purple" />
             </div>
 
-            <InsightBox title="Análisis Modalidad y Jornada" color="green">
-              <p>• 97.2% presencial: preferencia regional clara por modalidad tradicional</p>
-              <p>• Solo 2.8% en línea, muy por debajo de tendencias después de pandemia</p>
-              <p>• Jornada diurna predomina (60.9%), pero vespertino y ejecutivo suman 39.1%</p>
-              <p>• Segmento importante de estudiantes trabajadores en jornadas alternativas</p>
-            </InsightBox>
+            <div className="mt-8">
+              <InsightBox title="Análisis Modalidad y Jornada" color="green">
+                <p>• 97.2% presencial: preferencia regional clara por modalidad tradicional</p>
+                <p>• Solo 2.8% en línea, muy por debajo de tendencias después de pandemia</p>
+                <p>• Jornada diurna predomina (60.9%), pero vespertino y ejecutivo suman 39.1%</p>
+                <p>• Segmento importante de estudiantes trabajadores en jornadas alternativas</p>
+              </InsightBox>
+            </div>
           </div>
         )}
 
         {/* Tab 4: Áreas de Conocimiento */}
         {activeTab === 4 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={480}>
-                <BarChart data={knowledgeAreasData}>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={knowledgeAreasData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     dataKey="area"
@@ -553,8 +572,9 @@ function App() {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+            </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
                 {knowledgeAreasData.slice(0, 5).map((area, index) => (
                   <div key={index} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-5 shadow">
                     <div className="text-sm text-gray-600 mb-1">#{index + 1}</div>
@@ -565,23 +585,26 @@ function App() {
                 ))}
               </div>
 
-              <InsightBox title="Análisis por Áreas" color="purple">
-                <p>• Salud lidera con 25.1% (1,501 estudiantes), seguido por Tecnología (22.2%)</p>
-                <p>• Top 3 áreas (Salud, Tecnología, Adm. y Comercio) concentran 67.7% de matrícula</p>
-                <p>• Refleja necesidades regionales: salud, tecnología, servicios</p>
-                <p>• Áreas tradicionales como Educación (10.9%) y Derecho (8.2%) mantienen presencia</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis por Áreas" color="purple">
+                  <p>• Salud lidera con 25.1% (1,501 estudiantes), seguido por Tecnología (22.2%)</p>
+                  <p>• Top 3 áreas (Salud, Tecnología, Adm. y Comercio) concentran 67.7% de matrícula</p>
+                  <p>• Refleja necesidades regionales: salud, tecnología, servicios</p>
+                  <p>• Áreas tradicionales como Educación (10.9%) y Derecho (8.2%) mantienen presencia</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 5: Duración de Carreras */}
         {activeTab === 5 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={470}>
-                <BarChart data={durationData}>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={durationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     dataKey="duration"
@@ -600,8 +623,9 @@ function App() {
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
+            </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
                 <StatCard icon="📊" label="Promedio" value="7.86 semestres" sublabel="aproximadamente 4 años" color="blue" />
                 <StatCard icon="📍" label="Mediana" value="8 semestres" sublabel="4 años" color="purple" />
                 <StatCard icon="🎯" label="Moda" value="10 semestres" sublabel="5 años" color="green" />
@@ -609,23 +633,26 @@ function App() {
                 <StatCard icon="📐" label="Desviación Estándar" value="3.1 semestres" sublabel="Coeficiente Variación: 39.48%" color="pink" />
               </div>
 
-              <InsightBox title="Análisis de Duración" color="indigo">
-                <p>• Moda de 10 semestres (34.4%): predominan carreras profesionales completas (5 años)</p>
-                <p>• Promedio de 7.86 semestres indica mezcla importante de carreras técnicas (2 a 3 años)</p>
-                <p>• Coeficiente de Variación 39.48%: alta diversidad en duración de programas</p>
-                <p>• Rango de 13 semestres: desde técnicos cortos (4 semestres) hasta medicina y pedagogías (14 o más semestres)</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis de Duración" color="indigo">
+                  <p>• Moda de 10 semestres (34.4%): predominan carreras profesionales completas (5 años)</p>
+                  <p>• Promedio de 7.86 semestres indica mezcla importante de carreras técnicas (2 a 3 años)</p>
+                  <p>• Coeficiente de Variación 39.48%: alta diversidad en duración de programas</p>
+                  <p>• Rango de 13 semestres: desde técnicos cortos (4 semestres) hasta medicina y pedagogías (14 o más semestres)</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
 
         {/* Tab 6: Costos */}
         {activeTab === 6 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[700px]">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
-            <div>
-              <ResponsiveContainer width="100%" height={420}>
-                <BarChart data={costsData}>
+            <div className="flex-1 flex flex-col">
+              <div className="flex-1 w-full min-h-[55vh]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={costsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     dataKey="range"
@@ -643,10 +670,11 @@ function App() {
                   <Bar dataKey="arancel" fill="#F8B739" name="Arancel" radius={[12, 12, 0, 0]} label={{ position: 'top', fontSize: 14, fontWeight: 'bold', fill: '#1e293b' }} />
                 </BarChart>
               </ResponsiveContainer>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
                 {/* Matrícula */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-8 shadow-lg">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-8 shadow-lg h-full">
                   <h4 className="text-2xl font-bold text-gray-800 mb-5">💳 Matrícula</h4>
                   <div className="space-y-3 text-base">
                     <div className="flex justify-between">
@@ -677,7 +705,7 @@ function App() {
                 </div>
 
                 {/* Arancel */}
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-8 shadow-lg">
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-8 shadow-lg h-full">
                   <h4 className="text-2xl font-bold text-gray-800 mb-5">💰 Arancel</h4>
                   <div className="space-y-3 text-base">
                     <div className="flex justify-between">
@@ -708,12 +736,14 @@ function App() {
                 </div>
               </div>
 
-              <InsightBox title="Análisis de Costos" color="orange">
-                <p>• Alta variabilidad: Coeficiente de Variación aproximadamente 35-40% indica gran diversidad de programas</p>
-                <p>• Matrícula modal $137.000 coincide con la mediana</p>
-                <p>• Arancel modal $3.555.000 superior al promedio, sugiere concentración en programas de mayor costo</p>
-                <p>• Rango arancel $5.011.000: desde Centros de Formación Técnica económicos hasta medicina e ingeniería de alto costo</p>
-              </InsightBox>
+              <div className="mt-8">
+                <InsightBox title="Análisis de Costos" color="orange">
+                  <p>• Alta variabilidad: Coeficiente de Variación aproximadamente 35-40% indica gran diversidad de programas</p>
+                  <p>• Matrícula modal $137.000 coincide con la mediana</p>
+                  <p>• Arancel modal $3.555.000 superior al promedio, sugiere concentración en programas de mayor costo</p>
+                  <p>• Rango arancel $5.011.000: desde Centros de Formación Técnica económicos hasta medicina e ingeniería de alto costo</p>
+                </InsightBox>
+              </div>
             </div>
           </div>
         )}
