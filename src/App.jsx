@@ -335,7 +335,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -380,7 +380,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={ageRangeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -427,7 +427,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={institutionData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -482,7 +482,7 @@ function App() {
               {/* Modalidad */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
-                <div className="flex-1 w-full min-h-[360px]">
+                <div className="w-full h-[360px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -509,7 +509,7 @@ function App() {
               {/* Jornada */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
-                <div className="flex-1 w-full min-h-[360px]">
+                <div className="w-full h-[360px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={scheduleData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -549,7 +549,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={knowledgeAreasData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -602,7 +602,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={durationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -650,7 +650,7 @@ function App() {
           <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[420px]">
+              <div className="w-full h-[420px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={costsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
