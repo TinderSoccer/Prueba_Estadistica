@@ -258,7 +258,7 @@ function App() {
           </div>
         </div>
       ) : (
-      <div className="w-full px-4 sm:px-6 lg:px-12 py-6">
+      <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Navigation Tabs */}
         <div className="flex flex-wrap gap-3 justify-center mb-3">
@@ -281,7 +281,7 @@ function App() {
         {/* Content */}
         {/* Tab 7: Resumen */}
         {activeTab === 7 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             {resumenPage === 0 ? (
               // Página 1: Medidas de Tendencia Central
               <div className="flex-1 flex flex-col gap-8">
@@ -332,10 +332,10 @@ function App() {
 
         {/* Tab 0: Distribución por Género */}
         {activeTab === 0 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -377,10 +377,10 @@ function App() {
 
         {/* Tab 1: Rango de Edad */}
         {activeTab === 1 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={ageRangeData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -424,10 +424,10 @@ function App() {
 
         {/* Tab 2: Tipo de Institución */}
         {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-6xl md:text-7xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={institutionData} layout="vertical">
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -476,13 +476,13 @@ function App() {
 
         {/* Tab 3: Modalidad y Jornada */}
         {activeTab === 3 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
             <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Modalidad */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
-                <div className="flex-1 w-full min-h-[45vh]">
+                <div className="flex-1 w-full min-h-[280px] max-h-[460px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
@@ -509,7 +509,7 @@ function App() {
               {/* Jornada */}
               <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
-                <div className="flex-1 w-full min-h-[45vh]">
+                <div className="flex-1 w-full min-h-[280px] max-h-[460px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={scheduleData}>
                       <CartesianGrid strokeDasharray="3 3" />
@@ -546,10 +546,10 @@ function App() {
 
         {/* Tab 4: Áreas de Conocimiento */}
         {activeTab === 4 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={knowledgeAreasData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -599,10 +599,10 @@ function App() {
 
         {/* Tab 5: Duración de Carreras */}
         {activeTab === 5 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={durationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
@@ -647,10 +647,10 @@ function App() {
 
         {/* Tab 6: Costos */}
         {activeTab === 6 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[min(900px,_calc(100vh-140px))] flex flex-col">
             <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
             <div className="flex-1 flex flex-col">
-              <div className="flex-1 w-full min-h-[55vh]">
+              <div className="flex-1 w-full min-h-[320px] max-h-[520px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={costsData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
