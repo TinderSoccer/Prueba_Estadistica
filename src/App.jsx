@@ -281,7 +281,7 @@ function App() {
         {/* Content */}
         {/* Tab 7: Resumen */}
         {activeTab === 7 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             {resumenPage === 0 ? (
               // Página 1: Medidas de Tendencia Central
               <div className="flex-1 flex flex-col gap-8">
@@ -332,7 +332,7 @@ function App() {
 
         {/* Tab 0: Distribución por Género */}
         {activeTab === 0 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
@@ -377,7 +377,7 @@ function App() {
 
         {/* Tab 1: Rango de Edad */}
         {activeTab === 1 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
@@ -424,7 +424,7 @@ function App() {
 
         {/* Tab 2: Tipo de Institución */}
         {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
@@ -433,17 +433,17 @@ function App() {
                   <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
                   <XAxis
                     type="number"
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
+                    tick={{ fill: '#1e293b', fontSize: 20, fontWeight: 'bold' }}
                   />
                   <YAxis
                     dataKey="name"
                     type="category"
-                    width={280}
-                    tick={{ fill: '#1e293b', fontSize: 16, fontWeight: 'bold' }}
+                    width={350}
+                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
                   />
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
-                  <Bar dataKey="students" fill="#45B7D1" radius={[0, 12, 12, 0]} label={{ position: 'right', fontSize: 18, fontWeight: 'bold', fill: '#1e293b' }}>
+                  <Legend wrapperStyle={{ fontSize: '20px', fontWeight: 'bold' }} />
+                  <Bar dataKey="students" fill="#45B7D1" radius={[0, 12, 12, 0]} label={{ position: 'right', fontSize: 20, fontWeight: 'bold', fill: '#1e293b' }}>
                     {institutionData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
@@ -452,12 +452,12 @@ function App() {
                 </ResponsiveContainer>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
                 {institutionData.map((inst, index) => (
-                  <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-4 shadow">
-                    <div className="text-sm text-gray-600">{inst.name}</div>
-                    <div className="text-2xl font-bold text-gray-800">{inst.students.toLocaleString('es-CL')}</div>
-                    <div className="text-xs text-gray-500">{inst.percentage}%</div>
+                  <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 shadow">
+                    <div className="text-base font-semibold text-gray-600 mb-2">{inst.name}</div>
+                    <div className="text-3xl font-bold text-gray-800 mb-1">{inst.students.toLocaleString('es-CL')}</div>
+                    <div className="text-sm font-semibold text-gray-500">{inst.percentage}%</div>
                   </div>
                 ))}
               </div>
@@ -476,7 +476,7 @@ function App() {
 
         {/* Tab 3: Modalidad y Jornada */}
         {activeTab === 3 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
             <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
               {/* Modalidad */}
@@ -546,7 +546,7 @@ function App() {
 
         {/* Tab 4: Áreas de Conocimiento */}
         {activeTab === 4 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
@@ -599,7 +599,7 @@ function App() {
 
         {/* Tab 5: Duración de Carreras */}
         {activeTab === 5 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
@@ -647,7 +647,7 @@ function App() {
 
         {/* Tab 6: Costos */}
         {activeTab === 6 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-[calc(100vh-160px)] flex flex-col">
+          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
             <div className="flex-1 flex flex-col">
               <div className="w-full h-[420px]">
