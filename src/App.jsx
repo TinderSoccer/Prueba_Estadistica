@@ -221,10 +221,10 @@ function App() {
   }, [showIntro, activeTab]);
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 p-2">
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {showIntro ? (
-        <div className="flex items-center justify-center min-h-screen px-4">
-          <div className="text-center max-w-6xl">
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center max-w-7xl px-4">
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6 animate-fadeIn">
               Estadísticas de Educación Superior
             </h1>
@@ -258,10 +258,10 @@ function App() {
           </div>
         </div>
       ) : (
-      <div className="w-full px-2">
+      <div className="w-full max-w-[1800px] mx-auto px-4 py-2">
 
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-3 justify-center mb-4">
+        <div className="flex flex-wrap gap-3 justify-center mb-3">
           {tabs.map((tab, index) => (
             <button
               key={index}
