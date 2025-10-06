@@ -1,6 +1,84 @@
 import React, { useState } from 'react';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 
+// ====================================================================================================
+// PASO 1: Componente REUTILIZABLE para Análisis Descriptivo (VERSIÓN MEJORADA CON COLOR Y ESPAÑOL)
+// ====================================================================================================
+const VariableAnalysis = ({ title, data, classification, color = 'indigo' }) => {
+  const varClass =
+    classification.cualitativas.find(v => v.nombre === title) ||
+    classification.cuantitativas.find(v => v.nombre === title);
+
+  const tableHeaders = data.length > 0 ? Object.keys(data[0]) : [];
+
+  // Mapeo de encabezados de inglés a español
+  const headerTranslations = {
+    name: 'Categoría',
+    value: 'Frecuencia Absoluta',
+    percentage: 'Frecuencia Relativa (%)',
+    range: 'Rango',
+    students: 'N° de Estudiantes',
+    area: 'Área de Conocimiento',
+    duration: 'Duración (Semestres)',
+    programs: 'N° de Programas',
+    matricula: 'Frecuencia Matrícula',
+    arancel: 'Frecuencia Arancel'
+  };
+
+  const colorStyles = {
+    blue: { bg: 'bg-blue-50', border: 'border-blue-500', text: 'text-blue-700', pillBg: 'bg-blue-200', pillText: 'text-blue-800' },
+    purple: { bg: 'bg-purple-50', border: 'border-purple-500', text: 'text-purple-700', pillBg: 'bg-purple-200', pillText: 'text-purple-800' },
+    green: { bg: 'bg-green-50', border: 'border-green-500', text: 'text-green-700', pillBg: 'bg-green-200', pillText: 'text-green-800' },
+    orange: { bg: 'bg-orange-50', border: 'border-orange-500', text: 'text-orange-700', pillBg: 'bg-orange-200', pillText: 'text-orange-800' },
+    pink: { bg: 'bg-pink-50', border: 'border-pink-500', text: 'text-pink-700', pillBg: 'bg-pink-200', pillText: 'text-pink-800' },
+    indigo: { bg: 'bg-indigo-50', border: 'border-indigo-500', text: 'text-indigo-700', pillBg: 'bg-indigo-200', pillText: 'text-indigo-800' },
+  };
+  const theme = colorStyles[color] || colorStyles.indigo;
+
+  return (
+    <div className="mt-8 border-t-4 border-gray-200 pt-8">
+      <h3 className="text-3xl font-bold text-gray-800 mb-6">Análisis Descriptivo de la Variable</h3>
+      <div className={`${theme.bg} ${theme.border} border-l-4 p-6 rounded-xl mb-6`}>
+        <p className="text-xl font-bold text-gray-900">
+          Variable: <span className={theme.text}>{title}</span>
+        </p>
+        {varClass && (
+          <p className="text-xl font-bold text-gray-900 mt-2 flex items-center gap-x-3">
+            Clasificación:
+            <span className={`${theme.pillBg} ${theme.pillText} text-sm font-bold px-3 py-1 rounded-full`}>
+              {varClass.cualitativa ? 'Cualitativa' : 'Cuantitativa'}
+            </span>
+            <span className={`${theme.pillBg} ${theme.pillText} text-sm font-bold px-3 py-1 rounded-full`}>
+              {varClass.tipo}
+            </span>
+          </p>
+        )}
+      </div>
+      <h4 className="text-2xl font-semibold text-gray-700 mb-4">Tabla de Frecuencia</h4>
+      <div className="overflow-x-auto rounded-lg shadow-md">
+        <table className="w-full text-lg text-left">
+          <thead className={`bg-gray-800 text-white font-bold capitalize`}>
+            <tr>
+              {tableHeaders.map(header => <th key={header} className="p-4">{headerTranslations[header] || header}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr key={index} className="border-b bg-white even:bg-slate-50 hover:bg-gray-100">
+                {tableHeaders.map(header => (
+                  <td key={`${index}-${header}`} className="p-4 font-semibold">
+                    {typeof row[header] === 'number' ? row[header].toLocaleString('es-CL') : row[header]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
 // Componente de tarjeta de estadísticas
 const StatCard = ({ icon, label, value, sublabel, color = 'blue' }) => {
   const gradients = {
@@ -64,34 +142,35 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 function App() {
-  const [activeTab, setActiveTab] = useState(-1); // -1 = intro page, 0-7 = content sections
+  const [activeTab, setActiveTab] = useState(-1);
   const [showIntro, setShowIntro] = useState(true);
-  const [resumenPage, setResumenPage] = useState(0); // 0 = Tendencia Central, 1 = Dispersión
+  const [resumenPage, setResumenPage] = useState(0);
 
-  // Paleta de colores
   const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B739', '#E74C3C'];
   const GENDER_COLORS = ['#EC4899', '#3B82F6'];
 
-  // Datos estadísticos
+  // ====================================================================================================
+  // DATOS ACTUALIZADOS SEGÚN LOS ARCHIVOS CSV PROPORCIONADOS
+  // ====================================================================================================
   const genderData = [
     { name: 'Femenino', value: 3265, percentage: 56.33 },
     { name: 'Masculino', value: 2531, percentage: 43.67 }
   ];
 
   const ageRangeData = [
-    { range: '15-19', students: 1247, percentage: 20.8 },
-    { range: '20-24', students: 2834, percentage: 47.3 },
-    { range: '25-29', students: 1456, percentage: 24.3 },
-    { range: '30-34', students: 678, percentage: 11.3 },
-    { range: '35-39', students: 345, percentage: 5.8 },
-    { range: '40+', students: 427, percentage: 7.1 }
+    { range: '15-19', students: 1187 },
+    { range: '20-24', students: 2862 },
+    { range: '25-29', students: 879 },
+    { range: '30-34', students: 393 },
+    { range: '35-39', students: 256 },
+    { range: '40+', students: 219 }
   ];
 
   const institutionData = [
-    { name: 'Universidad de Magallanes (Consejo de Rectores)', students: 2456, percentage: 41.0 },
-    { name: 'INACAP', students: 1834, percentage: 30.6 },
-    { name: 'Universidades Privadas', students: 1123, percentage: 18.8 },
-    { name: 'Otros Centros de Formación Técnica e Institutos Profesionales', students: 1574, percentage: 26.3 }
+    { name: 'Universidades CRUCH', students: 3294 },
+    { name: 'Centros de Formación Técnica', students: 1480 },
+    { name: 'Institutos Profesionales', students: 877 },
+    { name: 'Universidades Privadas', students: 145 }
   ];
 
   const modalityData = [
@@ -106,16 +185,15 @@ function App() {
   ];
 
   const knowledgeAreasData = [
-    { area: 'Salud', students: 1501, percentage: 25.1 },
-    { area: 'Tecnología', students: 1331, percentage: 22.2 },
-    { area: 'Administración y Comercio', students: 1221, percentage: 20.4 },
-    { area: 'Educación', students: 653, percentage: 10.9 },
-    { area: 'Ciencias Sociales', students: 531, percentage: 8.9 },
-    { area: 'Derecho', students: 491, percentage: 8.2 },
-    { area: 'Ingeniería', students: 423, percentage: 7.1 },
-    { area: 'Arte y Arquitectura', students: 332, percentage: 5.5 },
-    { area: 'Ciencias Básicas', students: 273, percentage: 4.6 },
-    { area: 'Agropecuaria', students: 231, percentage: 3.9 }
+    { area: 'Salud', students: 1501 },
+    { area: 'Tecnología', students: 1331 },
+    { area: 'Administración y Comercio', students: 1221 },
+    { area: 'Educación', students: 653 },
+    { area: 'Ciencias Sociales', students: 531 },
+    { area: 'Derecho', students: 191 },
+    { area: 'Agropecuaria', students: 163 },
+    { area: 'Arte y Arquitectura', students: 132 },
+    { area: 'Ciencias Básicas', students: 73 }
   ];
 
   const durationData = [
@@ -134,8 +212,28 @@ function App() {
     { range: '$2.2M-$3.5M', matricula: 289, arancel: 823 },
     { range: '$3.5M+', matricula: 123, arancel: 534 }
   ];
+  
+  const variableClassification = {
+    cuantitativas: [
+      { nombre: 'Edad', tipo: 'Discreta', cualitativa: false },
+      { nombre: 'N° Estudiantes / Programas', tipo: 'Discreta', cualitativa: false },
+      { nombre: 'Duración Carrera (semestres)', tipo: 'Discreta', cualitativa: false },
+      { nombre: 'Monto Matrícula', tipo: 'Continua', cualitativa: false },
+      { nombre: 'Monto Arancel', tipo: 'Continua', cualitativa: false },
+      { nombre: 'Porcentaje', tipo: 'Continua', cualitativa: false }
+    ],
+    cualitativas: [
+      { nombre: 'Género', tipo: 'Nominal', cualitativa: true },
+      { nombre: 'Tipo de Institución', tipo: 'Nominal', cualitativa: true },
+      { nombre: 'Modalidad de Estudio', tipo: 'Nominal', cualitativa: true },
+      { nombre: 'Jornada', tipo: 'Nominal', cualitativa: true },
+      { nombre: 'Área de Conocimiento', tipo: 'Nominal', cualitativa: true },
+      { nombre: 'Rango de Edad', tipo: 'Ordinal', cualitativa: true },
+      { nombre: 'Duración de Carreras', tipo: 'Ordinal', cualitativa: true },
+      { nombre: 'Rango de Costos', tipo: 'Ordinal', cualitativa: true }
+    ]
+  };
 
-  // Tabs configuration
   const tabs = [
     { name: '👥 Género', icon: '👥' },
     { name: '🎂 Edad', icon: '🎂' },
@@ -147,7 +245,6 @@ function App() {
     { name: '📊 Resumen', icon: '📊' }
   ];
 
-  // Renderizado de etiquetas personalizadas en barras
   const renderCustomLabel = (props) => {
     const { x, y, width, height, value } = props;
     return (
@@ -157,50 +254,38 @@ function App() {
     );
   };
 
-  // Keyboard navigation
   React.useEffect(() => {
     const handleKeyPress = (e) => {
-      // Prevent default for Space key to avoid page scrolling
       if (e.key === ' ') {
         e.preventDefault();
       }
-
       if (showIntro) {
-        // From intro page, go to first section
         if (e.key === 'ArrowRight' || e.key === ' ') {
           setShowIntro(false);
           setActiveTab(0);
         }
       } else {
-        // Navigate between sections
         if (e.key === 'ArrowRight' || e.key === ' ') {
-          // Si estamos en Resumen (tab 7)
           if (activeTab === 7) {
             if (resumenPage === 0) {
-              // Mostrar página 2 de Resumen
               setResumenPage(1);
             } else {
-              // Salir de Resumen y ir a la siguiente sección
               setResumenPage(0);
-              setActiveTab(0); // Volver al inicio
+              setActiveTab(0);
             }
           } else {
             setActiveTab((prev) => (prev + 1) % 8);
-            setResumenPage(0); // Reset resumen page cuando cambiamos de tab
+            setResumenPage(0);
           }
         } else if (e.key === 'ArrowLeft') {
-          // Si estamos en Resumen (tab 7)
           if (activeTab === 7) {
             if (resumenPage === 1) {
-              // Volver a página 1 de Resumen
               setResumenPage(0);
             } else {
-              // Salir de Resumen y ir a la sección anterior
-              setActiveTab(6); // Ir a Costos
+              setActiveTab(6);
               setResumenPage(0);
             }
           } else if (activeTab === 0) {
-            // From first section, go back to intro
             setShowIntro(true);
             setActiveTab(-1);
             setResumenPage(0);
@@ -215,7 +300,6 @@ function App() {
         }
       }
     };
-
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [showIntro, activeTab]);
@@ -232,18 +316,15 @@ function App() {
               Región de Magallanes y Antártica Chilena
             </p>
             <p className="text-xl md:text-2xl text-gray-600 font-semibold mb-8 animate-fadeIn">Año 2021</p>
-
             <div className="inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-12 py-6 rounded-3xl shadow-2xl mb-10 animate-scaleIn">
               <p className="text-4xl md:text-5xl font-black">5,796 estudiantes</p>
             </div>
-
             <div className="mb-10 animate-fadeIn">
               <p className="text-xl md:text-2xl font-bold text-gray-800 mb-3">Integrantes</p>
               <p className="text-lg md:text-xl text-gray-600 font-semibold">Cristian Velasquez</p>
               <p className="text-lg md:text-xl text-gray-600 font-semibold">Ignacio Farias</p>
               <p className="text-lg md:text-xl text-gray-600 font-semibold">Julio Silva</p>
             </div>
-
             <div className="mt-10">
               <div className="text-gray-500 text-lg md:text-xl font-semibold animate-bounce mb-6">
                 Presiona → o Espacio para comenzar
@@ -258,496 +339,299 @@ function App() {
           </div>
         </div>
       ) : (
-      <div className="w-full max-w-[96vw] mx-auto px-4 py-3">
+        <div className="w-full max-w-[96vw] mx-auto px-4 py-3">
+          <div className="flex flex-wrap gap-3 justify-center mb-3">
+            {tabs.map((tab, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 ${activeTab === index
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-2xl scale-105'
+                    : 'bg-white text-gray-700 hover:shadow-lg hover:scale-105 border-2 border-gray-200'
+                  }`}
+              >
+                <span className="mr-2 text-xl">{tab.icon}</span>
+                {tab.name.replace(/^[^\s]+ /, '')}
+              </button>
+            ))}
+          </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex flex-wrap gap-3 justify-center mb-3">
-          {tabs.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`px-6 py-3 rounded-xl font-bold text-base transition-all duration-300 ${
-                activeTab === index
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-2xl scale-105'
-                  : 'bg-white text-gray-700 hover:shadow-lg hover:scale-105 border-2 border-gray-200'
-              }`}
-            >
-              <span className="mr-2 text-xl">{tab.icon}</span>
-              {tab.name.replace(/^[^\s]+ /, '')}
-            </button>
-          ))}
-        </div>
-
-        {/* Content */}
-        {/* Tab 7: Resumen */}
-        {activeTab === 7 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            {resumenPage === 0 ? (
-              // Página 1: Medidas de Tendencia Central
-              <div className="flex-1 flex flex-col gap-8">
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Tendencia Central</h2>
-                <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 1 de 2 - Presiona → para continuar</p>
-
-                <div>
-                  <h3 className="text-4xl font-bold text-gray-800 mb-8">📈 Estadísticas Centrales</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <StatCard icon="🎂" label="Edad Promedio" value="24.42 años" sublabel="Mediana: 22 años | Moda: 19 años" color="blue" />
-                    <StatCard icon="⏱️" label="Duración Carrera" value="7.86 semestres" sublabel="Mediana: 8 | Moda: 10" color="purple" />
-                    <StatCard icon="💳" label="Matrícula Promedio" value="$145,774" sublabel="Mediana: $137,000 | Moda: $137,000" color="green" />
-                    <StatCard icon="💰" label="Arancel Promedio" value="$2,693,403" sublabel="Mediana: $2,234,000 | Moda: $3,555,000" color="orange" />
+          {activeTab === 7 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              {resumenPage === 0 ? (
+                <div className="flex-1 flex flex-col gap-8">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Tendencia Central</h2>
+                  <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 1 de 2 - Presiona → para continuar</p>
+                  <div>
+                    <h3 className="text-4xl font-bold text-gray-800 mb-8">📈 Estadísticas Centrales</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                      <StatCard icon="🎂" label="Edad Promedio" value="24.42 años" sublabel="Mediana: 22 | Moda: 19" color="blue" />
+                      <StatCard icon="⏱️" label="Duración Carrera" value="7.86 sem." sublabel="Mediana: 8 | Moda: 10" color="purple" />
+                      <StatCard icon="💳" label="Matrícula Promedio" value="$145,774" sublabel="Mediana: $137.000 | Moda: $137.000" color="green" />
+                      <StatCard icon="💰" label="Arancel Promedio" value="$2.693.403" sublabel="Mediana: $2.234.000 | Moda: $3.555.000" color="orange" />
+                    </div>
+                    <InsightBox title="Interpretación - Tendencia Central" color="blue">
+                      <p>• La edad más frecuente es 19 años (recién egresados), pero la media de 24.42 indica presencia significativa de estudiantes mayores.</p>
+                      <p>• Las carreras de 10 semestres (5 años) son las más comunes, aunque la media de 7.86 sugiere presencia importante de carreras técnicas cortas.</p>
+                      <p>• El arancel modal ($3.555.000) es superior a la media ($2.693.403), sugiriendo concentración en programas de mayor costo.</p>
+                    </InsightBox>
                   </div>
-
-                  <InsightBox title="Interpretación - Tendencia Central" color="blue">
-                    <p>• La edad más frecuente es 19 años (recién egresados), pero la media de 24.42 indica presencia significativa de estudiantes mayores</p>
-                    <p>• Las carreras de 10 semestres (5 años) son las más comunes, aunque la media de 7.86 sugiere presencia importante de carreras técnicas cortas</p>
-                    <p>• El arancel modal ($3.555.000) es superior a la media ($2.693.403), sugiriendo concentración en programas de mayor costo</p>
-                  </InsightBox>
                 </div>
-              </div>
-            ) : (
-              // Página 2: Medidas de Dispersión
-              <div className="flex-1 flex flex-col gap-8">
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Dispersión</h2>
-                <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 2 de 2 - Presiona ← para volver</p>
-
-                <div>
-                  <h3 className="text-4xl font-bold text-gray-800 mb-8">📊 Variabilidad de Datos</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <StatCard icon="📏" label="Rango Edad" value="40 años" sublabel="Desviación Estándar: 6.38 | Coeficiente Variación: 26.14%" color="pink" />
-                    <StatCard icon="📐" label="Rango Duración" value="13 semestres" sublabel="Desviación Estándar: 3.1 | Coeficiente Variación: 39.48%" color="indigo" />
-                    <StatCard icon="📊" label="Rango Matrícula" value="$290,000" sublabel="Desviación Estándar: $50,895 | Coeficiente Variación: 34.91%" color="purple" />
-                    <StatCard icon="📈" label="Rango Arancel" value="$5,011,000" sublabel="Desviación Estándar: $1,070,871 | Coeficiente Variación: 39.76%" color="orange" />
+              ) : (
+                <div className="flex-1 flex flex-col gap-8">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Medidas de Dispersión</h2>
+                  <p className="text-center text-gray-500 text-xl mb-8 font-semibold">Página 2 de 2 - Presiona ← para volver</p>
+                  <div>
+                    <h3 className="text-4xl font-bold text-gray-800 mb-8">📊 Variabilidad de Datos</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                      <StatCard icon="📏" label="Rango Edad" value="40 años" sublabel="Desv. Estándar: 6.38 | CV: 26.14%" color="pink" />
+                      <StatCard icon="📐" label="Rango Duración" value="13 sem." sublabel="Desv. Estándar: 3.1 | CV: 39.48%" color="indigo" />
+                      <StatCard icon="📊" label="Rango Matrícula" value="$290.000" sublabel="Desv. Estándar: $50.895 | CV: 34.91%" color="purple" />
+                      <StatCard icon="📈" label="Rango Arancel" value="$5.011.000" sublabel="Desv. Estándar: $1.070.871 | CV: 39.76%" color="orange" />
+                    </div>
+                    <InsightBox title="Interpretación - Dispersión" color="orange">
+                      <p>• Alta variabilidad en costos (Coeficiente de Variación ~35-40%), indicando gran diversidad de programas.</p>
+                      <p>• La duración muestra alta dispersión (CV 39.48%): desde técnicos cortos hasta carreras universitarias largas.</p>
+                      <p>• Desviación estándar del arancel superior a $1.000.000 indica gran dispersión en precios.</p>
+                    </InsightBox>
                   </div>
-
-                  <InsightBox title="Interpretación - Dispersión" color="orange">
-                    <p>• Alta variabilidad en costos (Coeficiente Variación aproximadamente 35-40%), indicando gran diversidad de programas</p>
-                    <p>• La duración muestra alta dispersión (Coeficiente Variación 39.48%): desde técnicos cortos hasta medicina y pedagogías</p>
-                    <p>• Desviación estándar del arancel superior a $1,000,000 indica gran dispersión en precios</p>
-                  </InsightBox>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Tab 0: Distribución por Género */}
-        {activeTab === 0 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={genderData}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ name, percentage }) => `${name}: ${percentage}%`}
-                      outerRadius={170}
-                      fill="#8884d8"
-                      dataKey="value"
-                      style={{ fontSize: '20px', fontWeight: 'bold' }}
-                    >
-                      {genderData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={GENDER_COLORS[index % GENDER_COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip content={<CustomTooltip />} />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                <StatCard icon="👩" label="Mujeres" value="3,265" sublabel="56.33% del total" color="pink" />
-                <StatCard icon="👨" label="Hombres" value="2,531" sublabel="43.67% del total" color="blue" />
-              </div>
-
-              <div className="mt-8">
-                <InsightBox title="Análisis de Género" color="purple">
-                  <p>• 56.33% mujeres vs 43.67% hombres: mayoría femenina ligera</p>
-                  <p>• Refleja tendencia nacional de feminización de educación superior</p>
-                  <p>• Consistente con predominio femenino en áreas como Salud y Educación</p>
-                </InsightBox>
-              </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Tab 1: Rango de Edad */}
-        {activeTab === 1 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={ageRangeData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
-                  <XAxis
-                    dataKey="range"
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                    height={70}
-                  />
-                  <YAxis
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
-                  <Bar dataKey="students" fill="#4ECDC4" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
-                    {ageRangeData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-                <StatCard icon="📊" label="Promedio" value="24.42 años" color="blue" />
-                <StatCard icon="📍" label="Mediana" value="22 años" color="purple" />
-                <StatCard icon="🎯" label="Moda" value="19 años" color="green" />
-                <StatCard icon="📏" label="Desviación Estándar" value="6.38 años" color="orange" />
-              </div>
-
-              <div className="mt-8">
-                <InsightBox title="Análisis Etario" color="blue">
-                  <p>• Grupo de 20 a 24 años predomina con 47.3% (2,834 estudiantes)</p>
-                  <p>• Moda de 19 años indica fuerte ingreso después de enseñanza secundaria</p>
-                  <p>• Desviación estándar de 6.38 años muestra dispersión moderada</p>
-                  <p>• 26.14% de coeficiente de variación indica variabilidad etaria considerable</p>
-                </InsightBox>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 2: Tipo de Institución */}
-        {activeTab === 2 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={institutionData} layout="vertical">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
-                  <XAxis
-                    type="number"
-                    tick={{ fill: '#1e293b', fontSize: 20, fontWeight: 'bold' }}
-                  />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    width={350}
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '20px', fontWeight: 'bold' }} />
-                  <Bar dataKey="students" fill="#45B7D1" radius={[0, 12, 12, 0]} label={{ position: 'right', fontSize: 20, fontWeight: 'bold', fill: '#1e293b' }}>
-                    {institutionData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
-                {institutionData.map((inst, index) => (
-                  <div key={index} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6 shadow">
-                    <div className="text-base font-semibold text-gray-600 mb-2">{inst.name}</div>
-                    <div className="text-3xl font-bold text-gray-800 mb-1">{inst.students.toLocaleString('es-CL')}</div>
-                    <div className="text-sm font-semibold text-gray-500">{inst.percentage}%</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8">
-                <InsightBox title="Análisis Institucional" color="indigo">
-                  <p>• Universidad de Magallanes concentra 41% como institución del Consejo de Rectores líder regional</p>
-                  <p>• INACAP lidera formación técnico-profesional con 30.6%</p>
-                  <p>• Universidades privadas solo 18.8%, baja penetración regional</p>
-                  <p>• Centros de Formación Técnica e Institutos Profesionales representan segmento importante de formación técnica</p>
-                </InsightBox>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Modalidad y Jornada */}
-        {activeTab === 3 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
-            <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
-              {/* Modalidad */}
-              <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
-                <div className="w-full h-[360px]">
+          {activeTab === 0 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Distribución por Género</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[420px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
-                      <Pie
-                        data={modalityData}
-                        cx="50%"
-                        cy="50%"
-                        labelLine={false}
-                        label={({ name, percentage }) => `${name}: ${percentage}%`}
-                        outerRadius={150}
-                        fill="#8884d8"
-                        dataKey="value"
-                        style={{ fontSize: '18px', fontWeight: 'bold' }}
-                      >
-                        {modalityData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index]} />
-                        ))}
+                      <Pie data={genderData} cx="50%" cy="50%" labelLine={false} label={({ name, percentage }) => `${name}: ${percentage}%`} outerRadius={170} fill="#8884d8" dataKey="value" style={{ fontSize: '20px', fontWeight: 'bold' }}>
+                        {genderData.map((entry, index) => (<Cell key={`cell-${index}`} fill={GENDER_COLORS[index % GENDER_COLORS.length]} />))}
                       </Pie>
                       <Tooltip content={<CustomTooltip />} />
+                      <Legend />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                  <StatCard icon="👩" label="Mujeres" value="3.265" sublabel="56.33% del total" color="pink" />
+                  <StatCard icon="👨" label="Hombres" value="2.531" sublabel="43.67% del total" color="blue" />
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis de Género" color="purple">
+                    <p>• Hay una mayor proporción de mujeres (56.33%) que de hombres (43.67%) en la educación superior de la región.</p>
+                    <p>• Esta tendencia refleja una feminización creciente en la matrícula de educación superior a nivel nacional.</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Género" data={genderData} classification={variableClassification} color="pink" />
               </div>
+            </div>
+          )}
 
-              {/* Jornada */}
-              <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
-                <div className="w-full h-[360px]">
+          {activeTab === 1 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Rango de Edad</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[420px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={scheduleData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 'bold' }} />
-                      <YAxis tick={{ fontSize: 16, fontWeight: 'bold' }} />
+                    <BarChart data={ageRangeData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
+                      <XAxis dataKey="range" tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} height={70} />
+                      <YAxis tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} />
                       <Tooltip content={<CustomTooltip />} />
-                      <Bar dataKey="students" fill="#98D8C8" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
-                        {scheduleData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index + 2]} />
-                        ))}
+                      <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
+                      <Bar dataKey="students" fill="#4ECDC4" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
+                        {ageRangeData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+                  <StatCard icon="📊" label="Promedio" value="24.42 años" color="blue" />
+                  <StatCard icon="📍" label="Mediana" value="22 años" color="purple" />
+                  <StatCard icon="🎯" label="Moda" value="19 años" color="green" />
+                  <StatCard icon="📏" label="Desv. Estándar" value="6.38 años" color="orange" />
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis Etario" color="blue">
+                    <p>• El grupo de 20 a 24 años es el más numeroso, constituyendo el núcleo del estudiantado.</p>
+                    <p>• La moda de 19 años indica un fuerte ingreso directo desde la educación secundaria.</p>
+                    <p>• La desviación estándar de 6.38 años muestra una dispersión moderada pero significativa de las edades.</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Rango de Edad" data={ageRangeData} classification={variableClassification} color="blue" />
               </div>
             </div>
+          )}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-              <StatCard icon="🏫" label="Presencial" value="5,821" sublabel="97.2% del total" color="blue" />
-              <StatCard icon="☀️" label="Diurno" value="4,245" sublabel="60.9% del total" color="orange" />
-              <StatCard icon="🌙" label="Vespertino" value="1,689" sublabel="24.2% del total" color="purple" />
-            </div>
-
-            <div className="mt-8">
-              <InsightBox title="Análisis Modalidad y Jornada" color="green">
-                <p>• 97.2% presencial: preferencia regional clara por modalidad tradicional</p>
-                <p>• Solo 2.8% en línea, muy por debajo de tendencias después de pandemia</p>
-                <p>• Jornada diurna predomina (60.9%), pero vespertino y ejecutivo suman 39.1%</p>
-                <p>• Segmento importante de estudiantes trabajadores en jornadas alternativas</p>
-              </InsightBox>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 4: Áreas de Conocimiento */}
-        {activeTab === 4 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={knowledgeAreasData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
-                  <XAxis
-                    dataKey="area"
-                    angle={-45}
-                    textAnchor="end"
-                    height={130}
-                    tick={{ fill: '#1e293b', fontSize: 14, fontWeight: 'bold' }}
-                  />
-                  <YAxis
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
-                  <Bar dataKey="students" fill="#F7DC6F" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
-                    {knowledgeAreasData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-                {knowledgeAreasData.slice(0, 5).map((area, index) => (
-                  <div key={index} className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-5 shadow">
-                    <div className="text-sm text-gray-600 mb-1">#{index + 1}</div>
-                    <div className="text-base font-semibold text-gray-800 mb-2">{area.area}</div>
-                    <div className="text-2xl font-bold text-indigo-600">{area.students.toLocaleString('es-CL')}</div>
-                    <div className="text-sm text-gray-500">{area.percentage}%</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8">
-                <InsightBox title="Análisis por Áreas" color="purple">
-                  <p>• Salud lidera con 25.1% (1,501 estudiantes), seguido por Tecnología (22.2%)</p>
-                  <p>• Top 3 áreas (Salud, Tecnología, Adm. y Comercio) concentran 67.7% de matrícula</p>
-                  <p>• Refleja necesidades regionales: salud, tecnología, servicios</p>
-                  <p>• Áreas tradicionales como Educación (10.9%) y Derecho (8.2%) mantienen presencia</p>
-                </InsightBox>
+          {activeTab === 2 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 lg:p-12 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 text-center">Tipo de Institución</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[500px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={institutionData} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
+                      <XAxis type="number" tick={{ fill: '#1e293b', fontSize: 20, fontWeight: 'bold' }} />
+                      <YAxis dataKey="name" type="category" width={350} tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend wrapperStyle={{ fontSize: '20px', fontWeight: 'bold' }} />
+                      <Bar dataKey="students" fill="#45B7D1" radius={[0, 12, 12, 0]} label={{ position: 'right', fontSize: 20, fontWeight: 'bold', fill: '#1e293b' }}>
+                        {institutionData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis Institucional" color="indigo">
+                    <p>• Las Universidades del CRUCH dominan la matrícula regional, siendo la opción preferida.</p>
+                    <p>• Los Centros de Formación Técnica y los Institutos Profesionales juntos forman un bloque importante de educación técnico-profesional.</p>
+                    <p>• La presencia de Universidades Privadas es minoritaria en la región.</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Tipo de Institución" data={institutionData} classification={variableClassification} color="indigo" />
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Tab 5: Duración de Carreras */}
-        {activeTab === 5 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={durationData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
-                  <XAxis
-                    dataKey="duration"
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                    height={70}
-                  />
-                  <YAxis
-                    tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
-                  <Bar dataKey="programs" fill="#BB8FCE" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
-                    {durationData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mt-8">
-                <StatCard icon="📊" label="Promedio" value="7.86 semestres" sublabel="aproximadamente 4 años" color="blue" />
-                <StatCard icon="📍" label="Mediana" value="8 semestres" sublabel="4 años" color="purple" />
-                <StatCard icon="🎯" label="Moda" value="10 semestres" sublabel="5 años" color="green" />
-                <StatCard icon="📏" label="Rango" value="13 semestres" sublabel="Variabilidad alta" color="orange" />
-                <StatCard icon="📐" label="Desviación Estándar" value="3.1 semestres" sublabel="Coeficiente Variación: 39.48%" color="pink" />
-              </div>
-
-              <div className="mt-8">
-                <InsightBox title="Análisis de Duración" color="indigo">
-                  <p>• Moda de 10 semestres (34.4%): predominan carreras profesionales completas (5 años)</p>
-                  <p>• Promedio de 7.86 semestres indica mezcla importante de carreras técnicas (2 a 3 años)</p>
-                  <p>• Coeficiente de Variación 39.48%: alta diversidad en duración de programas</p>
-                  <p>• Rango de 13 semestres: desde técnicos cortos (4 semestres) hasta medicina y pedagogías (14 o más semestres)</p>
-                </InsightBox>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 6: Costos */}
-        {activeTab === 6 && (
-          <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
-            <div className="flex-1 flex flex-col">
-              <div className="w-full h-[420px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={costsData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
-                  <XAxis
-                    dataKey="range"
-                    angle={-35}
-                    textAnchor="end"
-                    height={90}
-                    tick={{ fill: '#1e293b', fontSize: 13, fontWeight: 'bold' }}
-                  />
-                  <YAxis
-                    tick={{ fill: '#1e293b', fontSize: 16, fontWeight: 'bold' }}
-                  />
-                  <Tooltip content={<CustomTooltip />} />
-                  <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold' }} />
-                  <Bar dataKey="matricula" fill="#85C1E2" name="Matrícula" radius={[12, 12, 0, 0]} label={{ position: 'top', fontSize: 14, fontWeight: 'bold', fill: '#1e293b' }} />
-                  <Bar dataKey="arancel" fill="#F8B739" name="Arancel" radius={[12, 12, 0, 0]} label={{ position: 'top', fontSize: 14, fontWeight: 'bold', fill: '#1e293b' }} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
-
-              <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
-                {/* Matrícula */}
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-8 shadow-lg h-full">
-                  <h4 className="text-2xl font-bold text-gray-800 mb-5">💳 Matrícula</h4>
-                  <div className="space-y-3 text-base">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Media:</span>
-                      <span className="font-bold">$145,774</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Mediana:</span>
-                      <span className="font-bold">$137,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Moda:</span>
-                      <span className="font-bold">$137,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Rango:</span>
-                      <span className="font-bold">$290,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Desv. Est.:</span>
-                      <span className="font-bold">$50,895</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Coef. Variación:</span>
-                      <span className="font-bold text-orange-600">34.91%</span>
-                    </div>
+          {activeTab === 3 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Modalidad y Jornada</h2>
+              <div className="flex-1 grid grid-cols-1 gap-8 lg:grid-cols-2">
+                <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">Modalidad de Estudio</h3>
+                  <div className="w-full h-[360px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie data={modalityData} cx="50%" cy="50%" labelLine={false} label={({ name, percentage }) => `${name}: ${percentage}%`} outerRadius={150} fill="#8884d8" dataKey="value" style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                          {modalityData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index]} />))}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
-
-                {/* Arancel */}
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-8 shadow-lg h-full">
-                  <h4 className="text-2xl font-bold text-gray-800 mb-5">💰 Arancel</h4>
-                  <div className="space-y-3 text-base">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Media:</span>
-                      <span className="font-bold">$2,693,403</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Mediana:</span>
-                      <span className="font-bold">$2,234,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Moda:</span>
-                      <span className="font-bold">$3,555,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Rango:</span>
-                      <span className="font-bold">$5,011,000</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Desv. Est.:</span>
-                      <span className="font-bold">$1,070,871</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600 font-semibold">Coef. Variación:</span>
-                      <span className="font-bold text-orange-600">39.76%</span>
-                    </div>
+                <div className="bg-white rounded-xl shadow-xl p-6 flex flex-col">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">Jornada</h3>
+                  <div className="w-full h-[360px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={scheduleData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 'bold' }} />
+                        <YAxis tick={{ fontSize: 16, fontWeight: 'bold' }} />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Bar dataKey="students" fill="#98D8C8" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
+                          {scheduleData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index + 2]} />))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
               </div>
-
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <StatCard icon="🏫" label="Presencial" value="5.821" sublabel="97.2% del total" color="blue" />
+                <StatCard icon="☀️" label="Diurno" value="4.245" sublabel="60.9% del total" color="orange" />
+                <StatCard icon="🌙" label="Vespertino" value="1.689" sublabel="24.2% del total" color="purple" />
+              </div>
               <div className="mt-8">
-                <InsightBox title="Análisis de Costos" color="orange">
-                  <p>• Alta variabilidad: Coeficiente de Variación aproximadamente 35-40% indica gran diversidad de programas</p>
-                  <p>• Matrícula modal $137.000 coincide con la mediana</p>
-                  <p>• Arancel modal $3.555.000 superior al promedio, sugiere concentración en programas de mayor costo</p>
-                  <p>• Rango arancel $5.011.000: desde Centros de Formación Técnica económicos hasta medicina e ingeniería de alto costo</p>
+                <InsightBox title="Análisis Modalidad y Jornada" color="green">
+                  <p>• La modalidad presencial es abrumadoramente dominante (97.2%), mostrando una clara preferencia regional.</p>
+                  <p>• La jornada diurna es la más común, pero las jornadas vespertina y ejecutiva combinadas representan un segmento significativo (39.1%), probablemente estudiantes que trabajan.</p>
                 </InsightBox>
               </div>
+              <VariableAnalysis title="Modalidad de Estudio" data={modalityData} classification={variableClassification} color="green" />
+              <VariableAnalysis title="Jornada" data={scheduleData} classification={variableClassification} color="orange" />
             </div>
-          </div>
-        )}
-      </div>
+          )}
+
+          {activeTab === 4 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Áreas de Conocimiento</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[420px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={knowledgeAreasData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
+                      <XAxis dataKey="area" angle={-45} textAnchor="end" height={130} tick={{ fill: '#1e293b', fontSize: 14, fontWeight: 'bold' }} />
+                      <YAxis tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
+                      <Bar dataKey="students" fill="#F7DC6F" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
+                        {knowledgeAreasData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis por Áreas" color="purple">
+                    <p>• Salud, Tecnología y Administración y Comercio son las tres áreas dominantes, concentrando la mayoría de los estudiantes.</p>
+                    <p>• Esto refleja las probables necesidades del mercado laboral y las vocaciones principales de la región.</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Área de Conocimiento" data={knowledgeAreasData} classification={variableClassification} color="purple" />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 5 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Duración de Carreras</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[420px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={durationData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
+                      <XAxis dataKey="duration" tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} height={70} />
+                      <YAxis tick={{ fill: '#1e293b', fontSize: 18, fontWeight: 'bold' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }} />
+                      <Bar dataKey="programs" fill="#BB8FCE" radius={[12, 12, 0, 0]} label={renderCustomLabel}>
+                        {durationData.map((entry, index) => (<Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis de Duración" color="indigo">
+                    <p>• Las carreras de 10 semestres (5 años) son las más frecuentes, lo que indica un predominio de carreras profesionales universitarias.</p>
+                    <p>• Existe una oferta diversificada, con una cantidad importante de programas técnicos de menor duración (4-5 semestres).</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Duración de Carreras" data={durationData} classification={variableClassification} color="pink" />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 6 && (
+            <div className="bg-white rounded-3xl shadow-2xl p-10 min-h-screen py-10 flex flex-col">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 text-center">Costos</h2>
+              <div className="flex-1 flex flex-col">
+                <div className="w-full h-[420px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={costsData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#d1d5db" strokeWidth={2} />
+                      <XAxis dataKey="range" angle={-35} textAnchor="end" height={90} tick={{ fill: '#1e293b', fontSize: 13, fontWeight: 'bold' }} />
+                      <YAxis tick={{ fill: '#1e293b', fontSize: 16, fontWeight: 'bold' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Legend wrapperStyle={{ fontSize: '16px', fontWeight: 'bold' }} />
+                      <Bar dataKey="matricula" fill="#85C1E2" name="Matrícula" radius={[12, 12, 0, 0]} label={{ position: 'top', fontSize: 14, fontWeight: 'bold', fill: '#1e293b' }} />
+                      <Bar dataKey="arancel" fill="#F8B739" name="Arancel" radius={[12, 12, 0, 0]} label={{ position: 'top', fontSize: 14, fontWeight: 'bold', fill: '#1e293b' }} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="mt-8">
+                  <InsightBox title="Análisis de Costos" color="orange">
+                    <p>• El rango de aranceles es muy amplio, lo que refleja la diversidad de la oferta educativa, desde carreras técnicas más económicas hasta programas universitarios de mayor costo.</p>
+                    <p>• La moda del arancel es significativamente más alta que la mediana, lo que sugiere que un gran número de estudiantes está matriculado en las carreras de mayor valor.</p>
+                  </InsightBox>
+                </div>
+                <VariableAnalysis title="Rango de Costos" data={costsData} classification={variableClassification} color="blue" />
+              </div>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
